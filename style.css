@@ -1,0 +1,40 @@
+.form-container {
+    margin: auto;
+    margin-top: 100px;
+    width: fit-content;
+}
+
+.form-item {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.form-item label {
+    margin-top: 20px;
+}
+
+.form-item label, .form-input {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 23px;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.error-msg {
+    display: none;
+}
+
+.form-input, .btn-submit {
+    width: 700px;
+    border: none;
+    border-bottom: solid 1px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.btn-submit {
+    border: solid 1px;
+    background-color: rgb(131, 164, 107);
+    border-radius: 25px;
+}
