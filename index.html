@@ -64,10 +64,17 @@
             />
           </div>
           <div class="form-item">
-            <label for="password">Password:</label
-            ><span class="error-msg"
-              >Some of the characters entered are not valid</span
-            >
+            <label for="password">Password:</label>
+            <div class="error-msg">
+              <p id="characters-err">
+                A password should have a combination of both
+                <strong>alphanumerics</strong> and
+                <strong>special characters</strong>
+              </p>
+              <p id="length-err">
+                A password should be at least eight (8) characters long
+              </p>
+            </div>
             <input
               type="password"
               name="password"

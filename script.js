@@ -37,6 +37,8 @@ const numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 inputElements.forEach((element) => {
   if (element.getAttribute("type") === "email") {
     element.addEventListener("blur", emailValidator);
+  } else if (element.getAttribute("type") === "password") {
+    element.addEventListener("blur", passwordValidator);
   } else {
     element.addEventListener("input", inputListener);
   }
@@ -104,6 +106,60 @@ function emailValidator(event) {
   }
 
   // display or hide error message
+  if (errorStatus) {
+    errMsg.style.display = "block";
+  } else {
+    errMsg.style.display = "none";
+  }
+}
+
+// function to validate passwords
+function passwordValidator(event) {
+  const activeElement = event.target;
+  const data = activeElement.value;
+  const dataArray = data.split("");
+  const errMsg = activeElement.parentElement.childNodes[3];
+  const charError = errMsg.childNodes[1];
+  const lenError = errMsg.childNodes[3];
+  let errorStatus = true;
+  let charStatus = true;
+  let lenStatus = true;
+  let availableChars = dictionary.concat(numbers);
+
+  console.log(errMsg.childNodes[1]);
+
+  // check for special characters
+  dataArray.forEach((char) => {
+    if (!availableChars.includes(char.toLowerCase())) {
+      charStatus = false;
+    }
+  });
+
+  // check length of password
+  if (dataArray.length >= 8) {
+    lenStatus = false;
+  }
+
+  // check presence of an error in the password entered
+  if (!charStatus && !lenStatus) {
+    errorStatus = false;
+  }
+
+  // handle display of individual length error
+  if (lenStatus) {
+    lenError.style.display = "block";
+  } else {
+    lenError.style.display = "none";
+  }
+
+  // handle display of individual characters error
+  if (charStatus) {
+    charError.style.display = "block";
+  } else {
+    charError.style.display = "none";
+  }
+
+  // display or hide error message block
   if (errorStatus) {
     errMsg.style.display = "block";
   } else {
