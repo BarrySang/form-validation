@@ -3,6 +3,7 @@ const inputElements = Array.prototype.slice.call(
   document.getElementsByClassName("form-input")
 );
 
+// library of all plphabetic characters
 const dictionary = [
   "a",
   "b",
@@ -31,7 +32,12 @@ const dictionary = [
   "y",
   "z",
 ];
+
+// library of all numerals
 const numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+// library of all available characters
+const availableChars = dictionary.concat(numbers);
 
 // listen for clicks on every input element
 inputElements.forEach((element) => {
@@ -53,29 +59,43 @@ inputElements.forEach((element) => {
   ) {
     element.addEventListener("blur", usernameValidator);
   } else {
-    element.addEventListener("input", inputListener);
+    element.addEventListener("input", textValidator);
   }
 });
 
-// function to run on input
-function inputListener(event) {
-  const activeElement = event.target;
-  const type = activeElement.getAttribute("type");
-  const data = activeElement.value;
-  switch (type) {
-    case "text":
-      textValidator(data, activeElement);
-      break;
-    case "password":
-      passwordValidator();
-      break;
+// function to get the active element
+function getActiveElement(event) {
+  return event.target;
+}
+
+// function to get data of element
+function getData(element) {
+  return element.value;
+}
+
+// function to split the string data into an array
+function getArray(data) {
+  return data.split("");
+}
+
+// function to get error message text
+function getErrMsg(event, position) {
+  return getActiveElement(event).parentElement.childNodes[position];
+}
+
+// function to display or hide error message
+function toggleErrMsg(errorStatus, errMsg) {
+  if (errorStatus) {
+    errMsg.style.display = "block";
+  } else {
+    errMsg.style.display = "none";
   }
 }
 
 // function to validate text inputs
-function textValidator(data, activeElement) {
-  const dataArray = data.split("");
-  const errMsg = activeElement.parentElement.childNodes[2];
+function textValidator(event) {
+  const dataArray = getArray(getData(getActiveElement(event)));
+  const errMsg = getErrMsg(event, 2);
   let errorStatus;
   dataArray.forEach((item) => {
     if (!dictionary.includes(item.toLowerCase())) {
@@ -86,26 +106,16 @@ function textValidator(data, activeElement) {
     }
   });
 
-  // display or hide error message
-  if (errorStatus) {
-    errMsg.style.display = "block";
-  } else {
-    errMsg.style.display = "none";
-  }
+  // toggle visibility of error message
+  toggleErrMsg(errorStatus, errMsg);
 }
-
-let emailCLickOnce = false;
 
 // function to validate emails
 function emailValidator(event) {
-  emailCLickOnce = true;
-  const activeElement = event.target;
-  const data = activeElement.value;
-  const dataArray = data.split("");
-  const errMsg = activeElement.parentElement.childNodes[2];
+  const dataArray = getArray(getData(getActiveElement(event)));
+  const errMsg = getErrMsg(event, 2);
   let errorStatus;
   let arrayLastPosition = dataArray.length - 1;
-  console.log(arrayLastPosition);
 
   if (
     dataArray[arrayLastPosition] !== "m" ||
@@ -118,26 +128,19 @@ function emailValidator(event) {
     errorStatus = true;
   }
 
-  // display or hide error message
-  if (errorStatus) {
-    errMsg.style.display = "block";
-  } else {
-    errMsg.style.display = "none";
-  }
+  // toggle visibility of error message
+  toggleErrMsg(errorStatus, errMsg);
 }
 
 // function to validate passwords
 function passwordValidator(event) {
-  const activeElement = event.target;
-  const data = activeElement.value;
-  const dataArray = data.split("");
-  const errMsg = activeElement.parentElement.childNodes[3];
+  const dataArray = getArray(getData(getActiveElement(event)));
+  const errMsg = getErrMsg(event, 3);
+  let errorStatus = true;
   const charError = errMsg.childNodes[1];
   const lenError = errMsg.childNodes[3];
-  let errorStatus = true;
   let charStatus = true;
   let lenStatus = true;
-  let availableChars = dictionary.concat(numbers);
 
   // check for special characters
   dataArray.forEach((char) => {
@@ -157,33 +160,19 @@ function passwordValidator(event) {
   }
 
   // handle display of individual length error
-  if (lenStatus) {
-    lenError.style.display = "block";
-  } else {
-    lenError.style.display = "none";
-  }
+  toggleErrMsg(lenStatus, lenError);
 
   // handle display of individual characters error
-  if (charStatus) {
-    charError.style.display = "block";
-  } else {
-    charError.style.display = "none";
-  }
+  toggleErrMsg(charStatus, charError);
 
-  // display or hide error message block
-  if (errorStatus) {
-    errMsg.style.display = "block";
-  } else {
-    errMsg.style.display = "none";
-  }
+  // toggle visibility of error message
+  toggleErrMsg(errorStatus, errMsg);
 }
 
 // function to validate 'confirm pasword' field
 function confirmPasswordValidator(event) {
-  const activeElement = event.target;
-  const data = activeElement.value;
-  const dataArray = data.split("");
-  const errMsg = activeElement.parentElement.childNodes[2];
+  const dataArray = getArray(getData(getActiveElement(event)));
+  const errMsg = getErrMsg(event, 2);
   let errorStatus;
 
   const passwordData = inputElements[4].value;
@@ -201,29 +190,20 @@ function confirmPasswordValidator(event) {
     }
   }
 
-  if (errorStatus) {
-    errMsg.style.display = "block";
-  } else {
-    errMsg.style.display = "none";
-  }
+  // toggle display of error message
+  toggleErrMsg(errorStatus, errMsg);
 }
 
 //function to handle username validation
 function usernameValidator(event) {
-  const activeElement = event.target;
-  const data = activeElement.value;
-  const dataArray = data.split("");
-  const errMsg = activeElement.parentElement.childNodes[2];
+  const dataArray = getArray(getData(getActiveElement(event)));
+  const errMsg = getErrMsg(event, 2);
   let errorStatus;
 
   if (dataArray.length < 1) {
     errorStatus = true;
   }
 
-  // display or hide error message
-  if (errorStatus) {
-    errMsg.style.display = "block";
-  } else {
-    errMsg.style.display = "none";
-  }
+  // toggle visibility of error message
+  toggleErrMsg(errorStatus, errMsg);
 }
