@@ -37,8 +37,16 @@ const numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 inputElements.forEach((element) => {
   if (element.getAttribute("type") === "email") {
     element.addEventListener("blur", emailValidator);
-  } else if (element.getAttribute("type") === "password") {
+  } else if (
+    element.getAttribute("type") === "password" &&
+    element.getAttribute("id") === "password"
+  ) {
     element.addEventListener("blur", passwordValidator);
+  } else if (
+    element.getAttribute("type") === "password" &&
+    element.getAttribute("id") === "pass-confirm"
+  ) {
+    element.addEventListener("blur", confirmPasswordValidator);
   } else {
     element.addEventListener("input", inputListener);
   }
@@ -126,8 +134,6 @@ function passwordValidator(event) {
   let lenStatus = true;
   let availableChars = dictionary.concat(numbers);
 
-  console.log(errMsg.childNodes[1]);
-
   // check for special characters
   dataArray.forEach((char) => {
     if (!availableChars.includes(char.toLowerCase())) {
@@ -160,6 +166,36 @@ function passwordValidator(event) {
   }
 
   // display or hide error message block
+  if (errorStatus) {
+    errMsg.style.display = "block";
+  } else {
+    errMsg.style.display = "none";
+  }
+}
+
+// function to validate 'confirm pasword' field
+function confirmPasswordValidator(event) {
+  const activeElement = event.target;
+  const data = activeElement.value;
+  const dataArray = data.split("");
+  const errMsg = activeElement.parentElement.childNodes[2];
+  let errorStatus;
+
+  const passwordData = inputElements[4].value;
+  const passwordDataArray = passwordData.split("");
+
+  if (dataArray.length !== passwordDataArray.length) {
+    errorStatus = true;
+  } else {
+    for (let i = 0; i < passwordDataArray.length; i++) {
+      if (passwordDataArray[i] !== dataArray[i]) {
+        if (!errorStatus) {
+          errorStatus = true;
+        }
+      }
+    }
+  }
+
   if (errorStatus) {
     errMsg.style.display = "block";
   } else {
