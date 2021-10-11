@@ -47,6 +47,11 @@ inputElements.forEach((element) => {
     element.getAttribute("id") === "pass-confirm"
   ) {
     element.addEventListener("blur", confirmPasswordValidator);
+  } else if (
+    element.getAttribute("type") === "text" &&
+    element.getAttribute("id") === "uname"
+  ) {
+    element.addEventListener("blur", usernameValidator);
   } else {
     element.addEventListener("input", inputListener);
   }
@@ -196,6 +201,26 @@ function confirmPasswordValidator(event) {
     }
   }
 
+  if (errorStatus) {
+    errMsg.style.display = "block";
+  } else {
+    errMsg.style.display = "none";
+  }
+}
+
+//function to handle username validation
+function usernameValidator(event) {
+  const activeElement = event.target;
+  const data = activeElement.value;
+  const dataArray = data.split("");
+  const errMsg = activeElement.parentElement.childNodes[2];
+  let errorStatus;
+
+  if (dataArray.length < 1) {
+    errorStatus = true;
+  }
+
+  // display or hide error message
   if (errorStatus) {
     errMsg.style.display = "block";
   } else {
